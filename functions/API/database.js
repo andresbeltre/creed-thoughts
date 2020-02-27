@@ -1,0 +1,28 @@
+const admin = require("firebase-admin");
+
+module.exports.createThought = async obj => {
+  try {
+    const thought = await admin
+      .firestore()
+      .collection("thoughts")
+      .add(obj);
+    return { success: true, thought: obj };
+  } catch (error) {
+    console.error(`Error creating the first creedThought: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+};
+
+module.exports.updateThought = async (uid, obj) => {
+  try {
+    const update = await admin
+      .firestore()
+      .collection("thoughts")
+      .doc(uid)
+      .update(obj);
+    return { success: true, thought: obj };
+  } catch (error) {
+    console.error(`Error updating doc ${uid}: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+};
