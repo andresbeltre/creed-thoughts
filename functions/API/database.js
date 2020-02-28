@@ -26,3 +26,17 @@ module.exports.updateThought = async (uid, obj) => {
     return { success: false, error: error.message };
   }
 };
+
+module.exports.deleteThought = async uid => {
+  try {
+    const borra = await admin
+      .firestore()
+      .collection("thoughts")
+      .doc(uid)
+      .delete();
+    return { success: true, thought: uid };
+  } catch (error) {
+    console.error(`Error deleting ${uid}: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+};

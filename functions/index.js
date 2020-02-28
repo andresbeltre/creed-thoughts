@@ -53,6 +53,19 @@ app.post("/thoughts/update", async (req, res) => {
   }
 });
 
+app.delete("/thoughts/delete", async (req, res) => {
+  try {
+    const thoughtID = {
+      uid: req.body.uid,
+      deteledAt: Date.now()
+    };
+    await db.deleteThought(req.body.uid);
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    return res.status(404).json({ success: false, error: error.message });
+  }
+});
+
 admin.initializeApp();
 firebase.initializeApp(firebaseConfig);
 exports.api = functions.https.onRequest(app);
