@@ -5,6 +5,12 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const db = require("./API/database");
+const {
+  linkScraper,
+  postScraper,
+  getThoughts,
+  getPost
+} = require("./thought-scraper");
 const firebaseConfig = {
   apiKey: "AIzaSyAsPBHbD5fVlV7d4ftm3M0OC4H675XmUoY",
   authDomain: "creed-thoughts-e5d5d.firebaseapp.com",
@@ -30,10 +36,21 @@ app.get("/", (req, res) => {
 app.get("/thoughts/all", async (req, res) => {
   try {
     const thoughts = await db.getAllThoughts();
-    return res.status(200).json({ success: true, thoughts });
+    return res.status(200).json({ success: true });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
   }
+});
+
+app.get("/thoughts/populate", async (req, res) => {
+  const body = await getThoughts();
+  const links = linkScraper(body);
+  const db = []
+  links.forEach(link => {
+    let post = await getPost(link)
+    let scrapedPost = postScraper(post)
+    db.push(scrapedPost)
+  })
 });
 
 app.post("/thoughts/new", async (req, res) => {
