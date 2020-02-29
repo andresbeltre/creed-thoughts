@@ -1,5 +1,18 @@
 const admin = require("firebase-admin");
 
+module.exports.getAllThoughts = async () => {
+  try {
+    const thoughts = await admin
+      .firestore()
+      .collection("thoughts")
+      .get();
+    return { success: true, allThoughts: thoughts.docs.map(doc => doc.data()) };
+  } catch (error) {
+    console.error(`Error gettinga all Creed's Thoughts: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+};
+
 module.exports.createThought = async obj => {
   try {
     const thought = await admin

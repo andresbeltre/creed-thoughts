@@ -27,6 +27,15 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
+app.get("/thoughts/all", async (req, res) => {
+  try {
+    const thoughts = await db.getAllThoughts();
+    return res.status(200).json({ success: true, thoughts });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 app.post("/thoughts/new", async (req, res) => {
   try {
     const thought = {
