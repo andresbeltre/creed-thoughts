@@ -58,28 +58,57 @@ const linkScraper = body => {
 };
 
 const postScraper = body => {
-  const window = new JSDOM(body, { pretendToBeVisual: true }).window;
-  let document = window.document;
-  console.log(body.includes("blog-post1"));
-  let paragraphs = document.querySelector("div.blog-post1").children;
-  // paragraphs.shift();
-  // paragraphs.shift();
-  console.log("PARAGRAPHS: ", paragraphs.item(0).innerHTML);
+  const document = new JSDOM(body).window.document;
+
+  //Getting the date of the Post
+  // let date = document.querySelector("div.blog-post1 p:nth-child(1) strong")
+  //   .text;
+  // const DATE = {
+  //   date: date.split(", ")[0],
+  //   time: date.split(", ")[1]
+  // };
+
+  //Getting the content of the post
+  let postHTMLCollection = document.querySelector("div.blog-post1").children;
+  let paragraphArray = [].slice.call(postHTMLCollection);
+  paragraphArray.shift();
+  paragraphArray.shift();
+
+  const lastP = paragraphArray.length - 1;
+
   let str = "";
-  paragraphs.forEach(paragraph => {
-    console.log(paragraph.innerText);
-  });
-  // for (var i = 0; i <= paragraphs.length; i++) {
-  //   if (i === paragraphs.length - 1) {
-  //     str += paragraphs[i].innerText;
-  //     break;
-  //   }
-  //   str += paragraphs[i].innerText;
-  //   str += "\n\n";
-  // }
-  return {
+
+  //checks if there is a 'more' link that links to full post
+  if (paragraphArray[lastP].innerHTML.includes("Creed Thoughts")) {
+    let moreLink = document.querySelector("div.blog-post1 p a").href;
+
+    /*
+    How do we want to deal wit the post that have a link to the full post.
+    I think we should split this function into smaller functions (MAYBE WE DONT NEED IT:
+      - A function to get check if the post has a more link:
+        if more link exist
+          feed the link to function that returns the HTMLCollection of P tags
+          then finsh processing in this function (putting all of the P tags into a single paragraph)
+        else
+          finsh processing in this function (putting all of the P tags into a single paragraph)
+    
+      */
+  }
+
+  for (var i = 0; i <= paragraphArray.length; i++) {
+    if (i === paragraphArray.length - 1) {
+      str += paragraphArray[i].innerHTML;
+      break;
+    }
+    str += paragraphArray[i].innerHTML;
+    str += "\n\n";
+  }
+
+  let post = {
     content: str
   };
+
+  return post;
 };
 
 // make a function that calls postScraper with each link returned from linkScraper
