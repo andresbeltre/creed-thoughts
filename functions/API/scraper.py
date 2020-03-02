@@ -15,7 +15,13 @@ def getLinks():
 
 
 def getPost(link):
-    return requests.get(url=link, headers=headers).text
+    body = requests.get(url=link, headers=headers).text
+    soup = BeautifulSoup(body, "html.parser")
+    if soup.find(class_="entry-more-link"):
+        print("---FOUND POST WITH READ MORE LINK---")
+        readLink = soup.find(class_="entry-more-link")
+        body = requests.get(url=readLink.a.get("href"), headers=headers).text
+    return body
 
 # returns list of links
 
@@ -30,6 +36,9 @@ def linkScraper(body):
     return linkList
 
 # returns object with post data
+
+
+# def verifyLinks(linkList):
 
 
 def postScraper(body):
@@ -69,15 +78,14 @@ def run():
     posts = []
     for link in links:
         print("ACCESSING: ", link)
-        print("\n")
         body = getPost(link)
         scrapePost = postScraper(body)
         posts.append(scrapePost)
         print("SCRAPED! moving on...")
-        print("\n")
     write(posts)
-    print("CHECK FILE!")
+    print("\nCHECK FILE!")
     return posts
+    # getPost("http://web.archive.org/web/20080914170457/http://blog.nbc.com/CreedThoughts/2008/02/24-week/#more")
 
 
 run()
