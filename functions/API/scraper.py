@@ -41,7 +41,7 @@ def linkScraper(body):
 # def verifyLinks(linkList):
 
 
-def postScraper(body):
+def postScraper(link, body):
     soup = BeautifulSoup(body, "html.parser")
     postDiv = soup.find(class_="blog-post1")
     soup = BeautifulSoup(str(postDiv), "html.parser")
@@ -59,11 +59,12 @@ def postScraper(body):
             post += content[counter].text
             break
         post += content[counter].text
-        post += "\n\n"
+        post += "\\n\\n"
         counter += 1
     return {
         "date": dateObj,
-        "content": post
+        "content": post,
+        "url": link
     }
 
 
@@ -79,7 +80,7 @@ def run():
     for link in links:
         print("ACCESSING: ", link)
         body = getPost(link)
-        scrapePost = postScraper(body)
+        scrapePost = postScraper(link, body)
         posts.append(scrapePost)
         print("SCRAPED! moving on...")
     write(posts)
