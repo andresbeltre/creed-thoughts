@@ -17,9 +17,9 @@ module.exports = app => {
   })
 
   app.get("/thoughts/random", async (req, res) => {
-    const thoughts = await db.getAllThoughts()
-    let randomNum = Math.floor(Math.random() * 67)
-    let randomThought = thoughts[randomNum]
-    res.status(200).json({ success: true, thought: randomThought })
+    const thoughts = await db.getAllThoughts();
+    let randomNum = Math.floor(Math.random() * 67);
+    let randomThought = thoughts[randomNum];
+    res.status(200).json({ success: true, thought: randomThought });
   })
 }

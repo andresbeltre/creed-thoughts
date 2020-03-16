@@ -14,6 +14,8 @@ const firebaseConfig = {
   appId: "1:783709070697:web:ddf6025e0cdfd718f289f8",
   measurementId: "G-Z50MYX2L4D"
 }
+const cors = require('cors');
+app.use(cors());
 
 app.use(bodyParser.json())
 app.use(
@@ -22,8 +24,8 @@ app.use(
   })
 )
 
-require("./routes/thoughtRoutes")(app)
+require("./routes/thoughtRoutes")(app);
 
-admin.initializeApp()
-firebase.initializeApp(firebaseConfig)
-exports.api = functions.https.onRequest(app)
+admin.initializeApp();
+firebase.initializeApp(firebaseConfig);
+exports.api = functions.https.onRequest(app);
