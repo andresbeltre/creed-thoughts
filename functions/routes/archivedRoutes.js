@@ -1,7 +1,7 @@
 module.exports = app => {
+  //function that populates the database
   app.get("/thoughts/populate", async (req, res) => {
-    // call a function that populates the database
-    await populateDb()
+    await db.populateDb() //this function lives in the database file
     res.status(201).json({ success: true, status: "Done, check database" })
   })
 

@@ -2,7 +2,7 @@ const db = require("../API/database")
 
 module.exports = app => {
   app.get("/", (req, res) => {
-    res.send("Hello, World!")
+    res.send("Creed Bratton's Thoughts are being stored here.")
   })
 
   app.get("/thoughts/all", async (req, res) => {
